@@ -53,12 +53,11 @@ export default class Card extends React.Component {
     return (
       <View style={styles.card}>
         <View>
-          <Text style={starred && styles.starred}>★</Text>
+          <Button onPress={this.props.toggleStar.bind(this, card.id)}>
+            <Text style={starred && styles.starred}>★</Text>
+          </Button>
         </View>
-        <Text>
-          {this.props.card.text}
-        </Text>
-        <Button onPress={this.props.toggleStar.bind(this, card.id)}><Text>Star</Text></Button>
+        {this.props.children}
       </View>
     );
   }
@@ -72,5 +71,6 @@ Card.shape = {
 
 Card.propTypes = {
   card: React.PropTypes.shape(Card.shape),
+  children: React.PropTypes.any,
   toggleStar: React.PropTypes.func
 };

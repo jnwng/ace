@@ -1,7 +1,7 @@
 import React, {
   AppRegistry,
 } from 'react-native';
-import CardsApp from './containers/CardsApp';
+import AceApp from './containers/AceApp';
 import {Provider} from 'react-redux/native';
 import configureStore from './store/configureStore';
 
@@ -11,9 +11,9 @@ class AppProvider extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        {() => <CardsApp />}
+        {() => <AceApp />}
       </Provider>
     );
   }
 }
-AppRegistry.registerComponent('cardular', () => AppProvider);
+AppRegistry.registerComponent('ace', () => AppProvider);

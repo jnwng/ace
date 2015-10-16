@@ -2,6 +2,7 @@ import React, {
   View
 } from 'react-native';
 import Card from './Card';
+import LectureCard from './cards/LectureCard';
 
 export default class Cards extends React.Component {
   render() {
@@ -10,7 +11,7 @@ export default class Cards extends React.Component {
     return (
       <View>
         {cards.map(card =>
-          <Card key={card.id} card={card} {...actions} />
+          <LectureCard key={card.id} card={card} {...actions} />
         )}
       </View>
     );

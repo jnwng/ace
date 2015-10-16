@@ -19,8 +19,7 @@ var styles = StyleSheet.create({
 
 class CardsApp extends React.Component {
   render() {
-    const {cards, dispatch} = this.props;
-    const actions = bindActionCreators(CardActions, dispatch);
+    const {cards, actions} = this.props;
 
     return (
       <View style={styles.container}>
@@ -32,15 +31,22 @@ class CardsApp extends React.Component {
 
 CardsApp.propTypes = {
   cards: React.PropTypes.array,
-  dispatch: React.PropTypes.func.isRequired
+  actions: React.PropTypes.object.isRequired
 };
 
-function mapStateToProps(state) {
-  const {cards} = state;
-
+function mapStateToProps({cards}) {
   return {
     cards
   };
 }
 
-export default connect(mapStateToProps)(CardsApp);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(CardActions, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CardsApp);
