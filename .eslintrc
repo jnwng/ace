@@ -1,0 +1,170 @@
+---
+# https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb
+extends: "airbnb"
+
+env:
+  browser: true
+  node: true
+  mocha: true
+  amd: true
+
+plugins:
+  - react # https://github.com/yannickcr/eslint-plugin-react
+
+ecmaFeatures:
+  globalReturn: false # allow return statements in the global scope
+  objectLiteralComputedProperties: false # enable computed object literal property names
+  regexUFlag: true # enable the regular expression u flag
+  regexYFlag: true # enable the regular expression y flag
+  restParams: true # enable the rest parameters
+  unicodeCodePointEscapes: false # enable code point escapes
+
+# http://eslint.org/docs/user-guide/configuring#configuring-rules
+# 0 - turn the rule off
+# 1 - turn the rule on as a warning (doesn't affect exit code)
+# 2 - turn the rule on as an error (exit code is 1 when triggered)
+rules:
+
+  # http://eslint.org/docs/rules/#possible-errors
+  comma-dangle: # disallow or enforce trailing commas
+    - 0
+    - "always-multiline"
+
+  # http://eslint.org/docs/rules/indent.html#options
+  # we indent our case in switch
+  # https://coursera.slack.com/archives/frontend-dev/p1438893952001109
+  indent:
+    - 2
+    - 2
+    -
+      SwitchCase: 1
+
+  # http://eslint.org/docs/rules/#best-practices
+  accessor-pairs: 2 # Enforces getter/setter pairs in objects (off by default)
+  complexity: 2 # specify the maximum cyclomatic complexity allowed in a program (off by default)
+  consistent-return: 1 # require return statements to either always or never specify values
+  curly: # specify curly brace conventions for all control statements
+    - 1
+    - "multi-line"
+  default-case: 1 # require default case in switch statements (off by default)
+  dot-notation: # encourages use of dot notation whenever possible
+    - 1
+    -
+      allowKeywords: true
+  dot-location:  # enforces consistent newlines before or after dots (off by default)
+    - 2
+    - "property"
+  eqeqeq: 1 # require the use of === and !==
+  func-names: 0 # we never do this but Airbnb warns
+  guard-for-in: 1 # we don't, we should, but Airbnb errors
+  id-length: 0 # we have many variables of 1 character length such as $ and _
+  new-cap:  # we have tons of constructors with lowercase starting letters (Airbnb errors)
+    - 1
+    - capIsNewExceptions:
+        - "Q"
+        - "API"
+        - "ZeroClipboard"
+
+  no-div-regex: 2 # disallow division operators explicitly at beginning of regular expression (off by default)
+  no-else-return: 0 # disallow else after a return in an if (off by default)
+  no-empty-label: 2 # disallow use of labels for anything other than loops and switches
+  no-iterator: 2 # disallow usage of __iterator__ property
+  no-labels: 2 # disallow use of labeled statements
+  no-multi-spaces: 2 # disallow use of multiple spaces
+  no-new: 2 # disallow use of new operator when not part of the assignment or comparison
+  no-param-reassign: 1 # disallow reassignment of function parameters (off by default)
+  no-process-env: 2 # disallow use of process.env (off by default)
+  no-unused-expressions: 2 # disallow usage of expressions in statement position
+  no-undef: 1 # must define variables before using it
+  no-var: 0 # we have var all over the place
+  no-void: 2 # disallow use of void operator (off by default)
+
+  # disallow usage of configurable warning terms in comments e.g. TODO or FIXME (off by default)
+  no-warning-comments: [1, { "terms": ["fixme", "hack", "xxx"], "location": "start" }]
+
+  # TODO remove this to default to Airbnb's "never"
+  # since Babel inserts "use strict" for us
+  # http://eslint.org/docs/rules/strict
+  strict: 0
+
+  # http://eslint.org/docs/rules/#variables
+  no-shadow: 1 # disallow use of undefined variable (off by default)
+  no-unused-vars: # disallow use of undefined variable (off by default)
+    - 1
+    -
+      args: none
+
+  # http://eslint.org/docs/rules/#stylistic-issues
+  computed-property-spacing: # require or disallow padding inside computed properties (off by default)
+    - 2
+    - "never"
+  linebreak-style: 2 # disallow mixed 'LF' and 'CRLF' as linebreaks (off by default)
+  no-continue: 2 # disallow use of the continue statement (off by default)
+  no-lonely-if: 2 # disallow if as the only statement in an else block (off by default)
+  no-nested-ternary: 1 # disallow nested ternary expressions (off by default)
+  no-unneeded-ternary: 2 # disallow the use of Boolean literals in conditional expressions (off by default)
+  operator-linebreak: # enforce operators to be placed before or after line breaks (off by default)
+    - 1
+    - "after"
+  padded-blocks: 0 # we aren't consistent and may never be
+  quotes: # require quotes around object literal property names (off by default)
+    - 1
+    - "single"
+    - "avoid-escape"
+  quote-props: # require quotes around object literal property names (off by default)
+    - 1 # our legacy APIs return values like 'start_date' and we prefer to quote them to maintain symbol casing
+    - "consistent"
+  sort-vars: 1 # sort variables within the same declaration block (off by default)
+
+  vars-on-top: 0 # good practice that we don't follow (Airbnb preset errors)
+
+  # http://eslint.org/docs/rules/#legacy
+  max-len: # specify the maximum length of a line in your program (off by default)
+    - 2
+    - 120
+    - 2
+
+  no-bitwise: 2 # disallow use of bitwise operators (off by default)
+  no-plusplus: 2 # disallow use of unary operators, ++ and -- (off by default)
+
+  # https://github.com/yannickcr/eslint-plugin-react
+  react/no-did-mount-set-state: 0 # Prevent usage of setState in componentDidMount
+  react/no-did-update-set-state: 0 # Prevent usage of setState in componentDidUpdate
+  react/no-multi-comp: 0 # Prevent multiple component definition per file
+  react/require-extension: 0 # Restrict file extensions that may be required
+  react/jsx-no-duplicate-props: 2 # Prevent duplicate props in JSX
+  react/jsx-boolean-value: 0 # We don't observe this
+  react/jsx-quotes: 0 # DEPRECATED https://github.com/airbnb/javascript/pull/514
+  jsx-quotes: #
+    - 2
+    - "prefer-double"
+
+  # slightly relax Airbnb's ordering to accommodate our more lax method naming
+  # see https://coursera.slack.com/archives/frontend-dev/p1438814179000882
+  react/sort-comp: # Enforce component methods order
+    - 1
+    -
+      order:
+        - "displayName"
+        - "propTypes"
+        - "contextTypes"
+        - "childContextTypes"
+        - "mixins"
+        - "statics"
+        - "defaultProps"
+        - "getDefaultProps"
+        - "getInitialState"
+        - "getChildContext"
+        - "componentWillMount"
+        - "componentDidMount"
+        - "componentWillReceiveProps"
+        - "shouldComponentUpdate"
+        - "componentWillUpdate"
+        - "componentDidUpdate"
+        - "componentWillUnmount"
+        - "/^handle.+$/"
+        - "/^on.+$/"
+        - "/^get.+$/"
+        - "everything-else"
+        - "/^render.+$/"
+        - "render"
