@@ -25,7 +25,12 @@ var config = {
       query: {
         stage: 0,
         plugins: [],
-        optional: ['es7.objectRestSpread', 'es7.classProperties', 'es7.decorators', 'spec.protoToAssign']
+        optional: [
+          'es7.objectRestSpread',
+          'es7.classProperties',
+          'es7.decorators',
+          'spec.protoToAssign'
+        ]
       }
     }]
   },

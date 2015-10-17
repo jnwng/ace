@@ -4,10 +4,7 @@
       id: '52312~0',
       type: 'lecture'
       metadata: {
-        notes: {
-          someNoteId: true,
-          someNoteId2: true,
-        },
+        notesCount: 0,
         starCount: 0,
         links: {
           someFooId2: true
@@ -38,13 +35,16 @@
     }
   },
   notes: {
-    someNoteId: {
-      text: 'someText',
-      author: bob,
-    },
-    someNoteId: {
-      text: 'someOtherText'
-      author: fred
+    someCardId: {
+      someNoteId: {
+        cardId: 'someId',
+        text: 'someText',
+        author: bob,
+      },
+      someNoteId: {
+        text: 'someOtherText',
+        author: fred
+      },
     }
   },
   users: {
