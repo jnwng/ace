@@ -4,6 +4,7 @@ import React, {
   View
 } from 'react-native';
 import Button from './common/Button';
+import Swipable from './common/Swipable';
 
 var styles = StyleSheet.create({
   card: {
@@ -41,7 +42,7 @@ export default class Card extends React.Component {
     var {starred} = card;
 
     return (
-      <View style={styles.card}>
+      <Swipable style={styles.card}>
         <View>
           <Button onPress={this.props.toggleStar.bind(this, card.id)}>
             <Text style={starred && styles.starred}>★</Text>
@@ -50,7 +51,7 @@ export default class Card extends React.Component {
         <View>
           {this.props.children}
         </View>
-      </View>
+      </Swipable>
     );
   }
 }

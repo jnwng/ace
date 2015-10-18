@@ -7,8 +7,8 @@ import Card from '../Card';
 
 var styles = StyleSheet.create({
   card: {
-    position: 'absolute',
-    alignItems: 'center'
+    // position: 'absolute',
+    // alignItems: 'center'
   }
 });
 
