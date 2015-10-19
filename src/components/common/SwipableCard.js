@@ -13,23 +13,37 @@ function clamp(value, min, max) {
   }
 }
 
-const SWIPE_THRESHOLD = 120;
+const SWIPE_THRESHOLD = -120;
 
 export default class Swipable extends React.Component {
 
   static propTypes = {
     children: React.PropTypes.node,
-    style: React.PropTypes.object
+    style: React.PropTypes.object,
+
+    onSwipeComplete: React.PropTypes.func,
+  }
+
+  static defaultProps = {
+    onSwipeComplete: () => {}
   }
 
   componentWillMount() {
     this._panResponder = PanResponder.create({
-      onMoveShouldSetResponderCapture: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
+
+      onMoveShouldSetPanResponder: (e, gestureState) => {
+        return gestureState.dy < 0;
+      },
 
       onPanResponderGrant: (e, gestureState) => {
         this.state.pan.setOffset({x: this.state.pan.x._value, y: this.state.pan.y._value});
         this.state.pan.setValue({x: 0, y: 0});
+      },
+
+      onPanResponderTerminationRequest: () => {
+        // If we are ever the responder, we shouldn't release it until
+        // the user releases the card (which is implicit since release will trigger the whole lifecycle)
+        return false;
       },
 
       onPanResponderMove: Animated.event([
@@ -46,14 +60,12 @@ export default class Swipable extends React.Component {
           velocity = clamp(vx * -1, 3, 5) * -1;
         }
 
-        if (Math.abs(this.state.pan.x._value) > SWIPE_THRESHOLD) {
-          // Success
+        if (this.state.pan.y._value < SWIPE_THRESHOLD) {
           Animated.decay(this.state.pan, {
             velocity: {x: velocity, y: vy},
             deceleration: 0.98
           }).start(this.resetState);
         } else {
-          // Failure
           Animated.spring(this.state.pan, {
             toValue: {x: 0, y: 0},
             friction: 4
@@ -83,10 +95,14 @@ export default class Swipable extends React.Component {
     ).start();
   }
 
+  animateExit() {
+
+  }
+
   resetState = () => {
     this.state.pan.setValue({x: 0, y: 0});
     this.state.enter.setValue(0);
-    // send success
+    this.props.onSwipeComplete();
   }
 
   render() {
@@ -97,15 +113,10 @@ export default class Swipable extends React.Component {
       inputRange: [-200, 0, 200],
       outputRange: ['-30deg', '0deg', '30deg']
     });
-    var opacity = pan.x.interpolate({
-      inputRange: [-200, 0, 200],
-      outputRange: [0.5, 1, 0.5]
-    });
     var scale = enter;
 
     var animatedCardStyles = {
       transform: [{translateX}, {translateY}, {rotate}, {scale}],
-      opacity
     };
 
     return (

@@ -5,13 +5,6 @@ import React, {
 } from 'react-native';
 import Card from '../Card';
 
-var styles = StyleSheet.create({
-  card: {
-    // position: 'absolute',
-    // alignItems: 'center'
-  }
-});
-
 export default class LectureCard extends React.Component {
 
   static propTypes = {
@@ -22,11 +15,10 @@ export default class LectureCard extends React.Component {
 
   render() {
     return (
-      <View style={styles.card}>
-        <Card {...this.props}>
-          <Text>Index: {this.props.card.index}</Text>
-        </Card>
-      </View>
+      <Card {...this.props}>
+        <Text>Index: {this.props.card.index}</Text>
+        <Text>Index: {this.props.card.index}</Text>
+      </Card>
     );
   }
 }

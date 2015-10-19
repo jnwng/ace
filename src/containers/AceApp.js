@@ -1,6 +1,7 @@
 import React, {
   Navigator,
   StyleSheet,
+  View,
 } from 'react-native';
 
 import CardsContainer from './Cards';
@@ -15,7 +16,15 @@ var styles = StyleSheet.create({
 export default class App extends React.Component {
 
   renderScene = (route, navigator) => {
-    return <CardsContainer />;
+    return (
+      <View style={{flex: 1}}>
+        <View style={{flex: 2, backgroundColor: 'red'}} />
+        <View style={{flex: 7, padding: 10}}>
+          <CardsContainer />
+        </View>
+        <View style={{flex: 1}} />
+      </View>
+    );
   }
 
   render() {

@@ -4,7 +4,7 @@ import React, {
   View
 } from 'react-native';
 import Button from './common/Button';
-import Swipable from './common/Swipable';
+import SwipableCard from './common/SwipableCard';
 
 var styles = StyleSheet.create({
   card: {
@@ -12,10 +12,13 @@ var styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 3,
     borderColor: '#000',
-    width: 300,
-    height: 300,
     padding: 10,
-    top: 0
+
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 
   starred: {
@@ -28,7 +31,8 @@ export default class Card extends React.Component {
   static propTypes = {
     card: React.PropTypes.shape(Card.shape),
     children: React.PropTypes.any,
-    toggleStar: React.PropTypes.func
+    toggleStar: React.PropTypes.func,
+    showNextCard: React.PropTypes.func,
   }
 
   static shape = {
@@ -42,7 +46,7 @@ export default class Card extends React.Component {
     var {starred} = card;
 
     return (
-      <Swipable style={styles.card}>
+      <SwipableCard style={styles.card} onSwipeComplete={this.props.showNextCard}>
         <View>
           <Button onPress={this.props.toggleStar.bind(this, card.id)}>
             <Text style={starred && styles.starred}>★</Text>
@@ -51,7 +55,7 @@ export default class Card extends React.Component {
         <View>
           {this.props.children}
         </View>
-      </Swipable>
+      </SwipableCard>
     );
   }
 }
