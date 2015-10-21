@@ -1,6 +1,7 @@
 import React, {
   Animated,
-  PanResponder
+  PanResponder,
+  View
 } from 'react-native';
 
 function clamp(value, min, max) {
@@ -19,7 +20,7 @@ export default class Swipable extends React.Component {
 
   static propTypes = {
     children: React.PropTypes.node,
-    style: React.PropTypes.object,
+    style: View.propTypes.style,
 
     onSwipeComplete: React.PropTypes.func,
   }

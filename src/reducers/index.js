@@ -32,7 +32,8 @@ function cardsToShow(state = initialState, action) {
     case SHOW_NEXT_CARD:
       var {showingLinkedCards, currentIndex, cards} = state;
 
-      if (showingLinkedCards && currentIndex + 1 === cards.length) {
+      if (showingLinkedCards && currentIndex + 1 === cards.length - 1) {
+        // we actually want to hide when we get back to the original card, i think
         return cardsToShow(state, {
           type: HIDE_LINKED_CARDS
         });
@@ -57,7 +58,7 @@ function cardsToShow(state = initialState, action) {
 
     case SHOW_LINKED_CARDS:
       // push current cards onto stack, return the cards that are linked
-      action.cards = state.cards.slice(4, 6);
+      action.cards = [...state.cards.slice(4, 6), state.cards[state.currentIndex]];
       return {
         ...state,
         cards: action.cards,

@@ -18,7 +18,7 @@ export default class App extends React.Component {
   renderScene = (route, navigator) => {
     return (
       <View style={{flex: 1}}>
-        <View style={{flex: 1, backgroundColor: '8AA1B1'}} />
+        <View style={{flex: 1}} />
         <View style={{flex: 14, padding: 10}}>
           <CardsContainer />
         </View>

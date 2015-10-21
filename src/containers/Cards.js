@@ -2,11 +2,13 @@ import React, {
   Animated,
   PanResponder,
   StyleSheet,
+  Text,
   View
 } from 'react-native';
 import {connect} from 'react-redux/native';
 import {bindActionCreators} from 'redux';
 
+import Button from '../components/common/Button';
 import LectureCard from '../components/cards/LectureCard';
 import QuestionCard from '../components/cards/QuestionCard';
 import * as CardActions from '../actions/cards';
@@ -14,7 +16,7 @@ import * as CardActions from '../actions/cards';
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
+  },
 });
 
 const DOWN_SWIPE_THRESHOLD = 40;
@@ -23,7 +25,8 @@ class CardsApp extends React.Component {
 
   static propTypes = {
     cards: React.PropTypes.array,
-    actions: React.PropTypes.object.isRequired
+    actions: React.PropTypes.object.isRequired,
+    showingLinkedCards: React.PropTypes.bool
   }
 
   componentWillMount() {
@@ -50,26 +53,38 @@ class CardsApp extends React.Component {
     const {cards, actions} = this.props;
 
     return (
-      <Animated.View
-        style={styles.container}
-        {...this._panResponder.panHandlers}>
-        {cards
-          .slice(0, 2)
-          .reverse()
-          .map((card, index) =>
-            // Do some dynamic stuff later
-            // <QuestionCard key={card.id} card={card} {...actions} />
-            <LectureCard key={card.id} card={card} {...actions} />
-          )
-        }
-      </Animated.View>
+      <View style={styles.container}>
+        <View style={{height: 40}}>
+          {this.props.showingLinkedCards &&
+            <Button onPress={actions.hideLinkedCards}>
+              <Text style={{color: 'white'}}>
+                X
+              </Text>
+            </Button>
+          }
+        </View>
+        <Animated.View
+          style={styles.container}
+          {...this._panResponder.panHandlers}>
+          {cards
+            .slice(0, 2)
+            .reverse()
+            .map((card, index) =>
+              // Do some dynamic stuff later
+              // <QuestionCard key={card.id} card={card} {...actions} />
+              <LectureCard key={card.id} card={card} {...actions} />
+            )
+          }
+        </Animated.View>
+      </View>
     );
   }
 }
 
-function mapStateToProps({cardsToShow: {currentIndex, cards}}) {
+function mapStateToProps({cardsToShow: {currentIndex, cards, showingLinkedCards}}) {
   return {
-    cards: cards.slice(currentIndex)
+    cards: cards.slice(currentIndex),
+    showingLinkedCards,
   };
 }
 

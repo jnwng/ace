@@ -32,6 +32,9 @@ var styles = StyleSheet.create({
 
   starred: {
     color: '#FFEB3B'
+  },
+
+  hint: {
   }
 });
 
@@ -65,7 +68,7 @@ export default class Card extends React.Component {
         <View>
           {this.props.children}
         </View>
-        <Button onPress={showLinkedCards.bind(this, card)}>
+        <Button style={styles.hint} onPress={showLinkedCards.bind(this, card)}>
           <Text>Hints</Text>
         </Button>
       </SwipableCard>

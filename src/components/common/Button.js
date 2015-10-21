@@ -6,7 +6,6 @@ import React, {
 
 var styles = StyleSheet.create({
   button: {
-    backgroundColor: '#eeeeee',
     padding: 10,
   },
 
@@ -20,7 +19,7 @@ export default class Button extends React.Component {
 
   static propTypes = {
     children: React.PropTypes.node,
-    style: React.PropTypes.object,
+    style: View.propTypes.style,
     onPress: React.PropTypes.func
   }
 
