@@ -3,42 +3,82 @@ import {
   SHOW_NEXT_CARD,
   SHOW_LAST_CARD,
   SHOW_STACK,
-  RECEIVE_CARDS
+  SHOW_LINKED_CARDS,
+  HIDE_LINKED_CARDS,
+  // RECEIVE_CARDS
 } from '../constants/ActionTypes';
 
-function cards(state = {}, action) {
-  switch (action.type) {
+// function cards(state = {}, action) {
+//   switch (action.type) {
 
-    case RECEIVE_CARDS:
-      return action.cards;
+//     case RECEIVE_CARDS:
+//       return action.cards;
 
-    default:
-      return state;
-  }
-}
+//     default:
+//       return state;
+//   }
+// }
 
 const initialState = {
   currentIndex: 0,
   cards: [],
+  stack: [],
+  showingLinkedCards: false
 };
 
 function cardsToShow(state = initialState, action) {
   switch (action.type) {
 
     case SHOW_NEXT_CARD:
-      return Object.assign({}, state, {
+      var {showingLinkedCards, currentIndex, cards} = state;
+
+      if (showingLinkedCards && currentIndex + 1 === cards.length) {
+        return cardsToShow(state, {
+          type: HIDE_LINKED_CARDS
+        });
+      }
+
+      return {
+        ...state,
         currentIndex: state.currentIndex + 1
-      });
+      };
 
     case SHOW_LAST_CARD:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         currentIndex: state.currentIndex - 1
-      });
+      };
 
     case SHOW_STACK:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         cards: action.cards
-      });
+      };
+
+    case SHOW_LINKED_CARDS:
+      // push current cards onto stack, return the cards that are linked
+      action.cards = state.cards.slice(4, 6);
+      return {
+        ...state,
+        cards: action.cards,
+        currentIndex: 0,
+        showingLinkedCards: true,
+        stack: [{
+          cards: state.cards,
+          currentIndex: state.currentIndex
+        }, ...state.stack]
+      };
+
+    case HIDE_LINKED_CARDS:
+      /* eslint-disable no-redeclare */
+      var [{cards, currentIndex}, ...restOfStack] = state.stack;
+      return {
+        ...state,
+        cards,
+        currentIndex,
+        showingLinkedCards: false,
+        stack: restOfStack
+      };
 
     default:
       return state;
@@ -46,7 +86,7 @@ function cardsToShow(state = initialState, action) {
 }
 
 const rootReducer = combineReducers({
-  cards,
+  // cards,
   cardsToShow
 });
 

@@ -1,7 +1,7 @@
 import * as types from '../constants/ActionTypes';
 
-var Firebase = require('firebase');
-var cardsRef = new Firebase('https://ace-coursera.firebaseio.com/cards');
+// var Firebase = require('firebase');
+// var cardsRef = new Firebase('https://ace-coursera.firebaseio.com/cards');
 
 export function toggleStar(id) {
   return {
@@ -37,13 +37,14 @@ function receiveCards(cards) {
 
 export function fetchCards() {
   return dispatch => {
-    cardsRef.limitToFirst(10).once('value', snapshot => {
-      var cards = snapshot.val();
-      Object.keys(cards).forEach(key => {
-        cards[key].id = key;
-      });
-      dispatch(receiveCards(cards));
+    // cardsRef.limitToFirst(10).once('value', snapshot => {
+      // var cards = snapshot.val();
+    var cards = require('../../testData.json').cards;
+    Object.keys(cards).forEach(key => {
+      cards[key].id = key;
     });
+    dispatch(receiveCards(cards));
+    // });
   };
 }
 
@@ -56,5 +57,18 @@ export function showNextCard() {
 export function showLastCard() {
   return {
     type: types.SHOW_LAST_CARD
+  };
+}
+
+export function showLinkedCards(card) {
+  return {
+    type: types.SHOW_LINKED_CARDS,
+    cards: card.linkedCards
+  };
+}
+
+export function hideLinkedCards(card) {
+  return {
+    type: types.HIDE_LINKED_CARDS
   };
 }

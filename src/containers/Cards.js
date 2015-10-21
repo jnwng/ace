@@ -8,12 +8,12 @@ import {connect} from 'react-redux/native';
 import {bindActionCreators} from 'redux';
 
 import LectureCard from '../components/cards/LectureCard';
+import QuestionCard from '../components/cards/QuestionCard';
 import * as CardActions from '../actions/cards';
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
   }
 });
 
@@ -58,6 +58,7 @@ class CardsApp extends React.Component {
           .reverse()
           .map((card, index) =>
             // Do some dynamic stuff later
+            // <QuestionCard key={card.id} card={card} {...actions} />
             <LectureCard key={card.id} card={card} {...actions} />
           )
         }

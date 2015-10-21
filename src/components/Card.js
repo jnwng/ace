@@ -9,10 +9,19 @@ import SwipableCard from './common/SwipableCard';
 var styles = StyleSheet.create({
   card: {
     backgroundColor: '#eee',
-    borderWidth: 3,
     borderRadius: 3,
-    borderColor: '#000',
     padding: 10,
+    // can't enable this because of performance
+    // shadowColor: '#4A5043',
+    // shadowOpacity: 0.5,
+    // shadowOffset: {
+    //   height: 1,
+    //   width: 0
+    // },
+    borderBottomColor: 'rgba(74,80,67, 0.5)',
+    borderBottomWidth: 2,
+    borderRightColor: 'rgba(74,80,67, 0.5)',
+    borderRightWidth: 2,
 
     position: 'absolute',
     top: 0,
@@ -33,6 +42,7 @@ export default class Card extends React.Component {
     children: React.PropTypes.any,
     toggleStar: React.PropTypes.func,
     showNextCard: React.PropTypes.func,
+    showLinkedCards: React.PropTypes.func,
   }
 
   static shape = {
@@ -42,19 +52,22 @@ export default class Card extends React.Component {
   }
 
   render() {
-    var {card} = this.props;
+    var {card, showLinkedCards} = this.props;
     var {starred} = card;
+          // <Button onPress={this.props.toggleStar.bind(this, card.id)}>
+          // </Button>
 
     return (
       <SwipableCard style={styles.card} onSwipeComplete={this.props.showNextCard}>
         <View>
-          <Button onPress={this.props.toggleStar.bind(this, card.id)}>
-            <Text style={starred && styles.starred}>★</Text>
-          </Button>
+          <Text style={starred && styles.starred}>★</Text>
         </View>
         <View>
           {this.props.children}
         </View>
+        <Button onPress={showLinkedCards.bind(this, card)}>
+          <Text>Hints</Text>
+        </Button>
       </SwipableCard>
     );
   }

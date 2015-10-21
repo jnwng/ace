@@ -9,7 +9,7 @@ import CardsContainer from './Cards';
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eaf333',
+    backgroundColor: '#8AA1B1',
   }
 });
 
@@ -18,11 +18,11 @@ export default class App extends React.Component {
   renderScene = (route, navigator) => {
     return (
       <View style={{flex: 1}}>
-        <View style={{flex: 2, backgroundColor: 'red'}} />
-        <View style={{flex: 7, padding: 10}}>
+        <View style={{flex: 1, backgroundColor: '8AA1B1'}} />
+        <View style={{flex: 14, padding: 10}}>
           <CardsContainer />
         </View>
-        <View style={{flex: 1}} />
+        <View style={{flex: 3}} />
       </View>
     );
   }

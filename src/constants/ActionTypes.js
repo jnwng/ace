@@ -11,3 +11,6 @@ export const SHOW_NEXT_CARD = 'SHOW_NEXT_CARD';
 export const SHOW_LAST_CARD = 'SHOW_LAST_CARD';
 
 export const SHOW_STACK = 'SHOW_STACK';
+
+export const SHOW_LINKED_CARDS = 'SHOW_LINKED_CARDS';
+export const HIDE_LINKED_CARDS = 'HIDE_LINKED_CARDS';
