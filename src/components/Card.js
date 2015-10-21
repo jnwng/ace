@@ -18,9 +18,9 @@ var styles = StyleSheet.create({
     //   height: 1,
     //   width: 0
     // },
-    borderBottomColor: 'rgba(74,80,67, 0.5)',
+    borderWidth: 1,
+    borderColor: 'rgba(74,80,67, 0.5)',
     borderBottomWidth: 2,
-    borderRightColor: 'rgba(74,80,67, 0.5)',
     borderRightWidth: 2,
 
     position: 'absolute',
@@ -35,6 +35,7 @@ var styles = StyleSheet.create({
   },
 
   hint: {
+    height: 30,
   }
 });
 
@@ -57,20 +58,22 @@ export default class Card extends React.Component {
   render() {
     var {card, showLinkedCards} = this.props;
     var {starred} = card;
-          // <Button onPress={this.props.toggleStar.bind(this, card.id)}>
-          // </Button>
 
     return (
       <SwipableCard style={styles.card} onSwipeComplete={this.props.showNextCard}>
-        <View>
-          <Text style={starred && styles.starred}>★</Text>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end'}}>
+          <View style={{flex: 1}}>
+            <View>
+              <Text style={starred && styles.starred}>★</Text>
+            </View>
+            <View>
+              {this.props.children}
+            </View>
+          </View>
+          <Button style={styles.hint} onPress={showLinkedCards.bind(this, card)}>
+            <Text>Hints</Text>
+          </Button>
         </View>
-        <View>
-          {this.props.children}
-        </View>
-        <Button style={styles.hint} onPress={showLinkedCards.bind(this, card)}>
-          <Text>Hints</Text>
-        </Button>
       </SwipableCard>
     );
   }
