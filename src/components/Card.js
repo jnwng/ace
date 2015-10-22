@@ -45,8 +45,11 @@ export default class Card extends React.Component {
     card: React.PropTypes.shape(Card.shape),
     children: React.PropTypes.any,
     toggleStar: React.PropTypes.func,
+    isShowing: React.PropTypes.bool,
     showNextCard: React.PropTypes.func,
     showLinkedCards: React.PropTypes.func,
+    shouldAnimateEntrance: React.PropTypes.bool,
+    shouldAnimateExit: React.PropTypes.bool,
   }
 
   static shape = {
@@ -56,11 +59,19 @@ export default class Card extends React.Component {
   }
 
   render() {
+    if (!this.props.isShowing) {
+      return null;
+    }
+
     var {card, showLinkedCards} = this.props;
     var {starred} = card;
 
     return (
-      <SwipableCard style={styles.card} onSwipeComplete={this.props.showNextCard}>
+      <SwipableCard
+        style={styles.card}
+        onSwipeComplete={this.props.showNextCard}
+        shouldAnimateEntrance={this.props.shouldAnimateEntrance}
+        shouldAnimateExit={this.props.shouldAnimateExit}>
         <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end'}}>
           <View style={{flex: 1}}>
             <View>

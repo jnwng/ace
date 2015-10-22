@@ -21,6 +21,8 @@ export default class Swipable extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     style: View.propTypes.style,
+    shouldAnimateEntrance: React.PropTypes.bool,
+    shouldAnimateExit: React.PropTypes.bool,
 
     onSwipeComplete: React.PropTypes.func,
   }
@@ -77,47 +79,58 @@ export default class Swipable extends React.Component {
   }
 
   componentDidMount() {
-    this.animateEntrance();
+    if (this.props.shouldAnimateEntrance) {
+      this.animateEntrance();
+    }
   }
 
   constructor(props) {
     super(props);
 
+    var startValue;
+    if (props.shouldAnimateEntrance) {
+      var x = Math.random() < 0.5 ? -50 : 200;
+      startValue = new Animated.ValueXY({x, y: -250});
+    } else {
+      startValue = new Animated.ValueXY();
+    }
+
     this.state = {
-      pan: new Animated.ValueXY(),
-      enter: new Animated.Value(0.5),
+      pan: startValue
     };
   }
 
   animateEntrance() {
-    Animated.spring(
-      this.state.enter,
-      { toValue: 1, friction: 8 }
-    ).start();
+    Animated.spring(this.state.pan, {
+      toValue: {x: 0, y: 0},
+      friction: 10
+    }).start();
   }
 
   animateExit() {
-
+    Animated.spring(this.state.pan, {
+      toValue: {x: 350, y: -500},
+      friction: 10
+    }).start();
   }
 
   resetState = () => {
+    // i dont think we actually need the next two lines
     this.state.pan.setValue({x: 0, y: 0});
-    this.state.enter.setValue(0);
     this.props.onSwipeComplete();
   }
 
   render() {
-    var {pan, enter} = this.state;
+    var {pan} = this.state;
     var [translateX, translateY] = [pan.x, pan.y];
 
     var rotate = pan.x.interpolate({
       inputRange: [-200, 0, 200],
       outputRange: ['-30deg', '0deg', '30deg']
     });
-    var scale = enter;
 
     var animatedCardStyles = {
-      transform: [{translateX}, {translateY}, {rotate}, {scale}],
+      transform: [{translateX}, {translateY}, {rotate}],
     };
 
     return (
