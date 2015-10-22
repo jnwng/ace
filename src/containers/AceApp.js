@@ -1,10 +1,10 @@
 import React, {
   Navigator,
   StyleSheet,
-  View,
 } from 'react-native';
 
 import CardsContainer from './Cards';
+import StacksContainer from './Stacks';
 
 var styles = StyleSheet.create({
   container: {
@@ -15,17 +15,27 @@ var styles = StyleSheet.create({
 export default class App extends React.Component {
 
   renderScene = (route, navigator) => {
-    return (
-      <CardsContainer />
-    );
+    switch (route.name) {
+      case 'cardList':
+        return <CardsContainer navigator={navigator} />;
+      case 'stackList':
+      default:
+        return <StacksContainer navigator={navigator} />;
+    }
   }
 
   render() {
     return (
       <Navigator
         style={styles.container}
-        initialRoute={{name: 'cardList'}}
+        initialRoute={{name: 'stackList'}}
         renderScene={this.renderScene}
+        configureScene={(route) => {
+          if (route.sceneConfig) {
+            return route.sceneConfig;
+          }
+          return Navigator.SceneConfigs.FloatFromBottom;
+        }}
       />
     );
   }
