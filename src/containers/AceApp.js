@@ -30,7 +30,7 @@ export default class App extends React.Component {
     return (
       <Navigator
         style={styles.container}
-        initialRoute={{name: 'cardList'}}
+        initialRoute={{name: 'stackList'}}
         renderScene={this.renderScene}
         configureScene={(route) => {
           if (route.sceneConfig) {

@@ -18,8 +18,8 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#8AA1B1',
     padding: 10,
-    paddingTop: 50,
-    paddingBottom: 50
+    paddingTop: 25,
+    paddingBottom: 100
   },
 
   showingLinkedCards: {
@@ -135,7 +135,7 @@ class CardsApp extends React.Component {
   }
 }
 
-function mapStateToProps({cardsToShow: {currentIndex, cards, showingLinkedCards}}) {
+function mapStateToProps({cardStore: {cardsToShow: {currentIndex, cards, showingLinkedCards}}}) {
   return {
     cards: cards.slice(currentIndex),
     showingLinkedCards,

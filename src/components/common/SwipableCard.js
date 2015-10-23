@@ -16,6 +16,8 @@ function clamp(value, min, max) {
 }
 
 const SWIPE_THRESHOLD = -120;
+const STACK_SCALE = 0.95;
+const STACK_OFFSET = 20;
 
 export default class Swipable extends React.Component {
 
@@ -100,11 +102,11 @@ export default class Swipable extends React.Component {
     } else if (!this.props.shouldInset && nextProps.shouldInset) {
       Animated.parallel([
         Animated.timing(this.state.scale, {
-          toValue: 0.98,
+          toValue: STACK_SCALE,
           easing: Easing.linear
         }),
         Animated.timing(this.state.pan, {
-          toValue: {x: 0, y: 10},
+          toValue: {x: 0, y: STACK_OFFSET},
           easing: Easing.linear
         })
       ]).start();
@@ -119,18 +121,18 @@ export default class Swipable extends React.Component {
       var x = Math.random() < 0.5 ? -50 : 200;
       startValue = new Animated.ValueXY({x, y: -250});
     } else {
-      var y = this.props.shouldInset ? 10 : 0;
+      var y = this.props.shouldInset ? STACK_OFFSET : 0;
       startValue = new Animated.ValueXY({x: 0, y});
     }
 
     this.state = {
       pan: startValue,
-      scale: props.shouldInset ? new Animated.Value(0.98) : new Animated.Value(1),
+      scale: props.shouldInset ? new Animated.Value(STACK_SCALE) : new Animated.Value(1),
     };
   }
 
   animateEntrance() {
-    var y = this.props.shouldInset ? 10 : 0;
+    var y = this.props.shouldInset ? STACK_OFFSET : 0;
     Animated.spring(this.state.pan, {
       toValue: {x: 0, y},
       friction: 10

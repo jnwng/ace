@@ -1,4 +1,5 @@
 import * as types from '../constants/ActionTypes';
+import data from '../../testData.json';
 
 // var Firebase = require('firebase');
 // var cardsRef = new Firebase('https://ace-coursera.firebaseio.com/cards');
@@ -10,7 +11,11 @@ export function toggleStar(id) {
   };
 }
 
-function showStack(cards) {
+export function showStack(stackId) {
+  var stacks = data.stacks;
+  var stack = stacks[stackId];
+  var cards = stack.cards.map(cardId => data.cards[cardId]);
+
   return {
     type: types.SHOW_STACK,
     cards
@@ -18,20 +23,9 @@ function showStack(cards) {
 }
 
 function receiveCards(cards) {
-  return dispatch => {
-
-    // This can be eliminated when we have the action to show the filtered stack.
-    var cardsList = Object.keys(cards).map((key, index) => {
-      var card = cards[key];
-      card.index = index;
-      return card;
-    });
-    dispatch(showStack(cardsList));
-
-    return {
-      type: types.RECEIVE_CARDS,
-      cards
-    };
+  return {
+    type: types.RECEIVE_CARDS,
+    cards
   };
 }
 

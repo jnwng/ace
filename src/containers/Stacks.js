@@ -6,6 +6,9 @@ import React, {
   Text,
   TouchableHighlight
 } from 'react-native';
+import {connect} from 'react-redux/native';
+import {bindActionCreators} from 'redux';
+import * as CardActions from '../actions/cards';
 
 var styles = StyleSheet.create({
   row: {
@@ -18,30 +21,28 @@ var styles = StyleSheet.create({
   }
 });
 
-const demoRows = [{
-  text: 'A Basic Stack',
-  stackId: 1,
-}, {
-  text: 'A Stack with Hints',
-  stackId: 2,
-}, {
-  text: 'A Stack with Something New',
-  stackId: 3,
-}, {
-  text: 'A Stack of People',
-  stackId: 4,
-}];
+var stacks = require('../../testData.json').stacks;
 
-export default class StacksContainer extends React.Component {
+// TODO(jon): load this via redux
+const demoRows = Object.keys(stacks).map(key => {
+  var stack = stacks[key];
+  stack.stackId = key;
+  return stack;
+});
+
+class StacksContainer extends React.Component {
 
   static propTypes = {
-    navigator: React.PropTypes.any
+    navigator: React.PropTypes.any,
+    actions: React.PropTypes.object
   }
 
-  onRowPress = (stackId) => {
+  onRowPress = (stackId, e) => {
+    var {showStack} = this.props.actions;
+    showStack(stackId);
+
     this.props.navigator.push({
       name: 'cardList',
-      stackId,
       sceneConfig: Navigator.SceneConfigs.FloatFromRight,
     });
   }
@@ -49,6 +50,7 @@ export default class StacksContainer extends React.Component {
   constructor(props) {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     this.state = {
       dataSource: ds.cloneWithRows(demoRows),
     };
@@ -58,10 +60,10 @@ export default class StacksContainer extends React.Component {
     return (
       <ListView
         dataSource={this.state.dataSource}
-        renderRow={({text, stackId}) => (
-          <TouchableHighlight onPress={this.onRowPress.bind(stackId)}>
+        renderRow={({name, stackId}) => (
+          <TouchableHighlight onPress={this.onRowPress.bind(this, stackId)}>
             <View style={styles.row}>
-              <Text>{text}</Text>
+              <Text>{name}</Text>
             </View>
           </TouchableHighlight>
         )}
@@ -69,3 +71,15 @@ export default class StacksContainer extends React.Component {
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(CardActions, dispatch)
+  };
+}
+
+export default connect(
+  () => ({}),
+  mapDispatchToProps
+)(StacksContainer);
+

@@ -10,8 +10,7 @@ var styles = StyleSheet.create({
   card: {
     backgroundColor: '#eee',
     borderRadius: 3,
-    padding: 10,
-    // can't enable this because of performance
+    padding: 40,
     // shadowColor: '#4A5043',
     // shadowOpacity: 0.5,
     // shadowOffset: {
@@ -25,9 +24,9 @@ var styles = StyleSheet.create({
 
     position: 'absolute',
     top: 0,
-    bottom: 20,
     left: 0,
-    right: 0,
+    bottom: 0,
+    right: 0
   },
 
   starred: {
@@ -36,6 +35,9 @@ var styles = StyleSheet.create({
 
   hint: {
     height: 30,
+    backgroundColor: '#FFCB47',
+    position: 'absolute',
+    bottom: -30
   }
 });
 
@@ -67,19 +69,14 @@ export default class Card extends React.Component {
         onSwipeComplete={this.props.showNextCard}
         shouldAnimateEntrance={this.props.shouldAnimateEntrance}
         shouldInset={this.props.shouldInset}>
-        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end'}}>
-          <View style={{flex: 1}}>
-            <View>
-              <Text style={starred && styles.starred}>★</Text>
-            </View>
-            <View>
-              {this.props.children}
-            </View>
-          </View>
+        <View style={{flex: 1}}>
+          {this.props.children}
+        </View>
+        {card.linkedCards &&
           <Button style={styles.hint} onPress={showLinkedCards.bind(this, card)}>
             <Text>Hints</Text>
           </Button>
-        </View>
+        }
       </SwipableCard>
     );
   }

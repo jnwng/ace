@@ -1,5 +1,6 @@
 import React, {
   Text,
+  TouchableHighlight,
   View,
   StyleSheet
 } from 'react-native';
@@ -11,7 +12,20 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 3,
-    backgroundColor: 'black',
+    borderWidth: 2,
+    borderColor: 'black',
+    marginLeft: 5,
+    marginRight: 5
+  },
+  button: {
+    width: 100,
+    height: 40,
+    backgroundColor: '#8AA1B1',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  success: {
+    backgroundColor: '#B9D8C2',
   }
 });
 
@@ -21,25 +35,54 @@ export default class QuestionCard extends React.Component {
     card: React.PropTypes.any
   }
 
+  onAnswerPress = (answerId) => {
+    // TODO(jon): this should be an action
+    this.setState({answerId});
+  }
+
+  onSubmitPress = () => {
+    this.setState({success: true});
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      answerId: null,
+    };
+  }
+
   render() {
-    var choices = [1, 2, 3, 4];
-    // Let's show a question, and four choices.
+    var {card} = this.props;
 
     return (
       <Card {...this.props}>
-        <View>
-          <Text>Some question</Text>
+        <View style={{marginBottom: 15}}>
+          <Text>{card.prompt}</Text>
         </View>
-        {choices.map((choice, index) =>
-          <Button key={index}>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
-              <View style={styles.checkbox} />
+        {Object.keys(card.answers).map((key, index) =>
+          <TouchableHighlight onPress={this.onAnswerPress.bind(this, key)} key={key}>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginTop: 10, marginBottom: 10}}>
+              <View style={styles.checkbox}>
+                {key === this.state.answerId && <Text>✓</Text>}
+              </View>
               <Text style={{flex: 1}}>
-                {index} answer
+                {card.answers[key]}
               </Text>
             </View>
-          </Button>
+          </TouchableHighlight>
         )}
+        <View style={{alignItems: 'center', marginTop: 15}}>
+          {this.state.answerId && (
+            <TouchableHighlight onPress={this.onSubmitPress}>
+              <View style={[styles.button, this.state.success && styles.success]}>
+                {this.state.success ?
+                  <Text style={{color: 'white', fontSize: 18}}>Correct!</Text> :
+                  <Text style={{color: 'white', fontSize: 18}}>Submit</Text>
+                }
+              </View>
+            </TouchableHighlight>
+          )}
+        </View>
       </Card>
     );
   }

@@ -5,19 +5,19 @@ import {
   SHOW_STACK,
   SHOW_LINKED_CARDS,
   HIDE_LINKED_CARDS,
-  // RECEIVE_CARDS
+  RECEIVE_CARDS
 } from '../constants/ActionTypes';
 
-// function cards(state = {}, action) {
-//   switch (action.type) {
+function cards(state = {}, action) {
+  switch (action.type) {
 
-//     case RECEIVE_CARDS:
-//       return action.cards;
+    case RECEIVE_CARDS:
+      return action.cards;
 
-//     default:
-//       return state;
-//   }
-// }
+    default:
+      return state;
+  }
+}
 
 const initialState = {
   currentIndex: 0,
@@ -47,18 +47,18 @@ function cardsToShow(state = initialState, action) {
     case SHOW_LAST_CARD:
       return {
         ...state,
-        currentIndex: state.currentIndex - 1
+        currentIndex: Math.max(state.currentIndex - 1, 0)
       };
 
     case SHOW_STACK:
       return {
         ...state,
-        cards: action.cards
+        cards: action.cards,
+        currentIndex: 0
       };
 
     case SHOW_LINKED_CARDS:
       // push current cards onto stack, return the cards that are linked
-      action.cards = [...state.cards.slice(4, 6), state.cards[state.currentIndex]];
       return {
         ...state,
         cards: action.cards,
@@ -86,9 +86,30 @@ function cardsToShow(state = initialState, action) {
   }
 }
 
+function cardStore(state = {}, action) {
+  /* eslint-disable no-shadow */
+  var _cards = cards(state.cards, action);
+
+  switch (action.type) {
+    case SHOW_LINKED_CARDS:
+      var currentCard = state.cardsToShow.cards[state.cardsToShow.currentIndex];
+      action.cards = [
+        ...currentCard.linkedCards.map(cardId => state.cards[cardId]),
+        currentCard
+      ];
+      break;
+    default:
+      break;
+  }
+
+  return {
+    cards: _cards,
+    cardsToShow: cardsToShow(state.cardsToShow, action)
+  };
+}
+
 const rootReducer = combineReducers({
-  // cards,
-  cardsToShow
+  cardStore
 });
 
 export default rootReducer;

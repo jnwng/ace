@@ -5,6 +5,12 @@ import React, {
 } from 'react-native';
 import Card from '../Card';
 
+var styles = StyleSheet.create({
+  text: {
+    fontSize: 18,
+  }
+});
+
 export default class InfoCard extends React.Component {
 
   static propTypes = {
@@ -16,7 +22,7 @@ export default class InfoCard extends React.Component {
   render() {
     return (
       <Card {...this.props}>
-        <Text>{this.props.card.content}</Text>
+        <Text style={styles.text}>{this.props.card.content}</Text>
       </Card>
     );
   }
