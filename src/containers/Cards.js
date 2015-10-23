@@ -9,7 +9,7 @@ import {connect} from 'react-redux/native';
 import {bindActionCreators} from 'redux';
 
 import Button from '../components/common/Button';
-import LectureCard from '../components/cards/LectureCard';
+import InfoCard from '../components/cards/InfoCard';
 import QuestionCard from '../components/cards/QuestionCard';
 import * as CardActions from '../actions/cards';
 
@@ -17,7 +17,9 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#8AA1B1',
-    padding: 10
+    padding: 10,
+    paddingTop: 50,
+    paddingBottom: 50
   },
 
   showingLinkedCards: {
@@ -75,8 +77,34 @@ class CardsApp extends React.Component {
     super(props);
     this.state = {
       shouldAnimateEntrance: false,
-      shouldAnimateExit: false
     };
+  }
+
+  renderCard = (card, index) => {
+    const {actions, showingLinkedCards, cards} = this.props;
+    // Lazy way to handle rendering a react component with the same id twice.
+    // Ignore the base card of the stack,
+    // since that will be shared across the render of the stacked and the linked cards
+    // May be obviated by a switch in how we render our linked cards.
+    var key = card.id + (showingLinkedCards && index !== cards.length - 1 ? 'linked' : '');
+
+    const config = {
+      key,
+      card,
+      // There are performance issues when animating more than just a few cards.
+      // Ultimately we only need to render the top two (since those are the only visible cards).
+      shouldAnimateEntrance: this.state.shouldAnimateEntrance && index < 2,
+      shouldInset: index !== 0,
+      ...actions
+    };
+
+    switch (card.type) {
+      case 'question':
+        return <QuestionCard {...config} />;
+      case 'info':
+      default:
+        return <InfoCard {...config} />;
+    }
   }
 
   render() {
@@ -97,27 +125,11 @@ class CardsApp extends React.Component {
           style={styles.container}
           {...this._panResponder.panHandlers}>
           {cards
-            // .slice(0, 2)
+            .map(this.renderCard)
+            // There's no concept of z-index in RN - use render order to determine layering instead.
             .reverse()
-            .map((card, index) => {
-              var realIndex = cards.length - 1 - index;
-              // rendering the slice is problematic because of the first card in the stack disappearing when the hints appear
-              // Do some dynamic stuff later
-              // <QuestionCard key={card.id} card={card} {...actions} />
-              return (
-                <LectureCard
-                  key={card.id}
-                  card={card}
-                  shouldAnimateEntrance={this.state.shouldAnimateEntrance}
-                  shouldAnimateExit={this.state.shouldAnimateExit}
-                  isShowing={realIndex < 2}
-                  {...actions} />
-              );
-
-            })
           }
         </Animated.View>
-        <View style={{height: 80}} />
       </View>
     );
   }

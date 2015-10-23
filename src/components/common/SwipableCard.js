@@ -1,5 +1,6 @@
 import React, {
   Animated,
+  Easing,
   PanResponder,
   View
 } from 'react-native';
@@ -21,8 +22,8 @@ export default class Swipable extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     style: View.propTypes.style,
+    shouldInset: React.PropTypes.bool,
     shouldAnimateEntrance: React.PropTypes.bool,
-    shouldAnimateExit: React.PropTypes.bool,
 
     onSwipeComplete: React.PropTypes.func,
   }
@@ -84,6 +85,32 @@ export default class Swipable extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.shouldInset && !nextProps.shouldInset) {
+      Animated.parallel([
+        Animated.timing(this.state.scale, {
+          toValue: 1,
+          easing: Easing.linear
+        }),
+        Animated.timing(this.state.pan, {
+          toValue: {x: 0, y: 0},
+          easing: Easing.linear
+        })
+      ]).start();
+    } else if (!this.props.shouldInset && nextProps.shouldInset) {
+      Animated.parallel([
+        Animated.timing(this.state.scale, {
+          toValue: 0.98,
+          easing: Easing.linear
+        }),
+        Animated.timing(this.state.pan, {
+          toValue: {x: 0, y: 10},
+          easing: Easing.linear
+        })
+      ]).start();
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -92,24 +119,20 @@ export default class Swipable extends React.Component {
       var x = Math.random() < 0.5 ? -50 : 200;
       startValue = new Animated.ValueXY({x, y: -250});
     } else {
-      startValue = new Animated.ValueXY();
+      var y = this.props.shouldInset ? 10 : 0;
+      startValue = new Animated.ValueXY({x: 0, y});
     }
 
     this.state = {
-      pan: startValue
+      pan: startValue,
+      scale: props.shouldInset ? new Animated.Value(0.98) : new Animated.Value(1),
     };
   }
 
   animateEntrance() {
+    var y = this.props.shouldInset ? 10 : 0;
     Animated.spring(this.state.pan, {
-      toValue: {x: 0, y: 0},
-      friction: 10
-    }).start();
-  }
-
-  animateExit() {
-    Animated.spring(this.state.pan, {
-      toValue: {x: 350, y: -500},
+      toValue: {x: 0, y},
       friction: 10
     }).start();
   }
@@ -130,7 +153,7 @@ export default class Swipable extends React.Component {
     });
 
     var animatedCardStyles = {
-      transform: [{translateX}, {translateY}, {rotate}],
+      transform: [{translateX}, {translateY}, {rotate}, {scale: this.state.scale}],
     };
 
     return (

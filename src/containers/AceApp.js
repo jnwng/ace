@@ -15,6 +15,8 @@ var styles = StyleSheet.create({
 export default class App extends React.Component {
 
   renderScene = (route, navigator) => {
+    // We need a navigation bar at the top
+    // and a card counter at the bottom
     switch (route.name) {
       case 'cardList':
         return <CardsContainer navigator={navigator} />;
@@ -28,7 +30,7 @@ export default class App extends React.Component {
     return (
       <Navigator
         style={styles.container}
-        initialRoute={{name: 'stackList'}}
+        initialRoute={{name: 'cardList'}}
         renderScene={this.renderScene}
         configureScene={(route) => {
           if (route.sceneConfig) {

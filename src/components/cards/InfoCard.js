@@ -5,7 +5,7 @@ import React, {
 } from 'react-native';
 import Card from '../Card';
 
-export default class LectureCard extends React.Component {
+export default class InfoCard extends React.Component {
 
   static propTypes = {
     index: React.PropTypes.number,
@@ -16,8 +16,7 @@ export default class LectureCard extends React.Component {
   render() {
     return (
       <Card {...this.props}>
-        <Text>Index: {this.props.card.index}</Text>
-        <Text>Index: {this.props.card.index}</Text>
+        <Text>{this.props.card.content}</Text>
       </Card>
     );
   }

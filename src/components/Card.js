@@ -25,7 +25,7 @@ var styles = StyleSheet.create({
 
     position: 'absolute',
     top: 0,
-    bottom: 0,
+    bottom: 20,
     left: 0,
     right: 0,
   },
@@ -45,11 +45,10 @@ export default class Card extends React.Component {
     card: React.PropTypes.shape(Card.shape),
     children: React.PropTypes.any,
     toggleStar: React.PropTypes.func,
-    isShowing: React.PropTypes.bool,
     showNextCard: React.PropTypes.func,
     showLinkedCards: React.PropTypes.func,
     shouldAnimateEntrance: React.PropTypes.bool,
-    shouldAnimateExit: React.PropTypes.bool,
+    shouldInset: React.PropTypes.bool,
   }
 
   static shape = {
@@ -59,10 +58,6 @@ export default class Card extends React.Component {
   }
 
   render() {
-    if (!this.props.isShowing) {
-      return null;
-    }
-
     var {card, showLinkedCards} = this.props;
     var {starred} = card;
 
@@ -71,7 +66,7 @@ export default class Card extends React.Component {
         style={styles.card}
         onSwipeComplete={this.props.showNextCard}
         shouldAnimateEntrance={this.props.shouldAnimateEntrance}
-        shouldAnimateExit={this.props.shouldAnimateExit}>
+        shouldInset={this.props.shouldInset}>
         <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end'}}>
           <View style={{flex: 1}}>
             <View>
