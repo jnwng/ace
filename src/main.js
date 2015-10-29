@@ -17,3 +17,4 @@ class AppProvider extends React.Component {
   }
 }
 AppRegistry.registerComponent('ace', () => AppProvider);
+AppRegistry.registerComponent('main', () => AppProvider);
